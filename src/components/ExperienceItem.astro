@@ -1,0 +1,10 @@
+---
+const { title, duration } = Astro.props;
+---
+<div class="experience-item mb-4">
+   <h3 class="h4">{title}</h3>
+  <p class="text-muted mb-2"><small>{duration}</small></p>
+  <div class="content">
+    <slot />
+  </div>
+</div>

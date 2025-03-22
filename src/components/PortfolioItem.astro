@@ -1,0 +1,51 @@
+---
+const { title, description, repo, badges } = Astro.props;
+---
+<div class="port-item mb-5">
+  <h3 class="h4">{title}</h3>
+  <p class="text-muted mb-3">{description}</p>
+  
+  <div class="port-item-tech mb-3 d-flex flex-wrap gap-2">
+    {badges.map((badge) => (
+      <span 
+        class={`badge bg-${badge.color} ${
+          badge.dark ? 'text-white' : 'text-dark'
+        } me-2`} 
+        style="margin-right: 5px; margin-left: 0;"
+      >
+        {badge.text}
+      </span>
+    ))}
+  </div>
+
+  <a href={repo} target="_blank" class="btn btn-outline-dark btn-sm">
+    <i class="fab fa-github me-2"></i>
+    Ver en GitHub
+  </a>
+</div>
+
+<style>
+  .port-item-tech .badge {
+    transition: all 0.2s ease;
+    padding: 0.5em 0.8em;
+    /* Fuerza contraste de color */
+    --bs-bg-opacity: 1;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+  
+  /* Colores oscuros - texto blanco */
+  .badge.bg-dark,
+  .badge.bg-primary,
+  .badge.bg-success,
+  .badge.bg-danger,
+  .badge.bg-warning,
+  .badge.bg-info {
+    color: white !important;
+  }
+  
+  /* Colores claros - texto oscuro */
+  .badge.bg-light,
+  .badge.bg-secondary {
+    color: white !important;
+  }
+</style>

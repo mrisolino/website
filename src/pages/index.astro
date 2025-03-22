@@ -1,0 +1,132 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import ExperienceItem from '../components/ExperienceItem.astro';
+import PortfolioItem from '../components/PortfolioItem.astro';
+---
+
+<Layout title="Martin Risolino - Curriculum">
+  <Header />
+
+  <section class="mb-4" id="about">
+    <h2 class="mb-3">Extracto</h2>
+    <p>24 años de experiencia - Desarrollador apasionado de sistemas informáticos back and frontend, amante de la música y la literatura. Autodidacta constante, siempre en la búsqueda del conocimiento a través de proyectos para empresas o propios experimentales personales. Con gran interés en generar soluciones innovadoras mediante la programación. Mas de 15 años creando y customizando plataformas de capacitación LMS's (MOODLE/TOTARA). </p>
+  </section>
+
+  <section class="mb-4" id="skills">
+    <h2 class="mb-3">Skills</h2>
+    <p>::FullStack:: PHP, JavaScript, Python, HTML, React, Node.js, MySQL, PostgreSQL, MongoDB, Linux, Git, GitLab, GitHub, AWS, CloudFlare, OpenAI APIs, Moodle (LMS's)</p>
+  </section>
+
+
+
+<section class="mb-4" id="experience">
+  <h2 class="mb-3">Experiencia</h2>
+
+  <ExperienceItem title="OvoGestion - Propietario" duration="Marzo de 2023 - Presente">
+    <p>Sistema de gestión, producción, ventas y control de stock para empresa de huevos avícolas. Desarrollado en la nube, con módulos creados a medida de cada necesidad.</p>
+  </ExperienceItem>
+
+  <ExperienceItem title="Kineo - Technical consultant" duration="Julio de 2021 - Enero de 2024 (2 años 7 meses)">
+    <p>Desarrollo de sistemas custom sobre Moodle/Totara para clientes como:
+      <span class="fw-bold">YPF, Cinepolis, Diltex, Salud Digna, Banorte</span>.
+    </p>
+    <p class="mt-2">Monitoreo de sistemas, manejo de instancias y bucket's en AWS. Tareas de Devops.</p>
+  </ExperienceItem>
+
+  <ExperienceItem title="Likeapoem.com - Propietario" duration="Marzo de 2023 - Presente">
+    <p>Likeapoem.com es un sitio web dedicado a la poesía, donde los amantes de la literatura pueden encontrar una amplia variedad de poemas en diferentes idiomas y estilos.</p>
+  </ExperienceItem>
+
+  <ExperienceItem title="Tercer Termino SRL - Investigación y Desarrollo" duration="Marzo de 2012 - Julio de 2021 (9 años 5 meses)">
+    <p>Colegiales - Bs As. Desarrollo y programación de plataformas de E-learning en Moodle, Sistemas de Reportes, Resolución de problemas.</p>
+    <p class="mt-2">Sincronización de dotación de usuarios y avances entre diferentes sistemas de gestión (SAP). App en IOS y Android.</p>
+    <p class="mt-2 fw-semibold">Clientes destacados:</p>
+    <ul class="client-list">
+      <li>YPF</li>
+      <li>Aerolineas Argentinas</li>
+      <li>Tecpetrol</li>
+      <li>Arcos Dorados (Mc'Donals)</li>
+      <li>Skanka</li>
+      <li>Nestlé</li>
+      <li>Santander Rio</li>
+      <li>Techint</li>
+      <li>UADE</li>
+      <li>Makro</li>
+      <li>Cencosud</li>
+    </ul>
+  </ExperienceItem>
+
+  <ExperienceItem title="28bytes - Desarrollador de sistemas y Programador" duration="Enero de 2000 - Abril de 2012 (12 años 4 meses)">
+    <p>Sistemas realizados desarrollando, programando en varios lenguajes y creando interfaces gráficas:</p>
+    <ul class="mt-2">
+      <li>Sistema de Rastreo Satelital</li>
+      <li>Sistema de Cámaras de Seguridad</li>
+      <li>Sistema de Seguridad por GPRS (PIC y módulo SIMGSM900)</li>
+    </ul>
+  </ExperienceItem>
+
+  <ExperienceItem title="EEMN1 - Profesor de Informática" duration="Marzo de 2007 - Diciembre de 2011 (4 años 10 meses)">
+    <p>Docencia en informática a nivel secundario.</p>
+  </ExperienceItem>
+
+  <ExperienceItem title="LivecomSRL - Desarrollador de sistemas y Programador" duration="Enero de 2008 - Mayo de 2011 (3 años 5 meses)">
+    <p>Puesta en marcha de diversos servidores en Linux. Sistema de reconocimiento de SMS y respuestas dinámicas eventuales.</p>
+    <p class="mt-2">Website, posicionamiento en buscadores, folletería, calcos.</p>
+  </ExperienceItem>
+</section>
+
+
+<section class="mb-4" id="portfolio">
+  <h2 class="mb-4">Portfolio OpenSource</h2>
+
+  <PortfolioItem
+    title="Interpretador de Sueños"
+    description="Aplicación web interactiva que interpreta sueños utilizando inteligencia artificial (DeepSeek)."
+    repo="https://github.com/mrisolino/mr_Interpretacion_De_Suenos"
+    badges={[
+      { text: 'Vite', color: 'success' },
+      { text: 'React.js', color: 'info' },
+      { text: 'OpenRouter AI', color: 'secondary' },
+      { text: 'DeepSeek', color: 'warning', textColor: 'dark' },
+      { text: 'Tailwind', color: 'info' }
+    ]}
+  />
+
+  <PortfolioItem
+    title="Gestión de Viajes y Pasajeros"
+    description="Sistema para gestionar viajes y pasajeros con frontend en React y backend en Node.js."
+    repo="https://github.com/mrisolino/turismo"
+    badges={[
+      { text: 'Bootstrap', color: 'success' },
+      { text: 'React', color: 'info' },
+      { text: 'Node.js', color: 'primary' },
+      { text: 'MySQL', color: 'warning', textColor: 'dark' }
+    ]}
+  />
+
+  <PortfolioItem
+    title="Bot de Telegram para Marca de Agua"
+    description="Bot que automatiza el proceso de añadir marcas de agua a imágenes recibidas via Telegram."
+    repo="https://github.com/mrisolino/mr_marca_de_agua"
+    badges={[
+      { text: 'Python', color: 'success' },
+      { text: 'python-telegram-bot', color: 'info' },
+      { text: 'Pillow', color: 'secondary' }
+    ]}
+  />
+</section>
+
+  <section class="mb-4" id="contact">
+    <h2 class="mb-3">Contactar</h2>
+    <p><img src="/images/cont.webp" alt="Contactar"></p>
+  </section>
+
+  <a class="btn btn-download btn-success no-imprimir" href="/Martin_Risolino-CV.pdf" target="_blank">
+    Descargar CV
+  </a>
+
+  <footer class="text-center">
+    <p>© 2025 Martin Risolino</p>
+  </footer>
+</Layout>
