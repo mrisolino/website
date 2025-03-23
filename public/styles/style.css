@@ -133,9 +133,9 @@ h3 {
 
 /* Para PortfolioItem */
 .port-item:not(:last-child) {
-  border-bottom: gray 1px dashed;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
+	border-bottom: gray 1px dashed;
+	padding-bottom: 20px;
+	margin-bottom: 20px !important;
 }
 
 .port-item strong {
