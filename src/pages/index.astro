@@ -26,12 +26,13 @@ const portfolioContent = await fetchData('http://localhost:5000/api/portfolio');
 
   <section class="mb-4" id="about">
     <h2 class="mb-3">{aboutContent?.title}</h2>
-    <p>{aboutContent?.content}</p>
+    <p set:html={aboutContent?.content} />
   </section>
 
   <section class="mb-4" id="skills">
     <h2 class="mb-3">{skillsContent?.title}</h2>
-    <p>{skillsContent?.content}</p>
+    <p set:html={skillsContent?.content} />
+    
   </section>
 
   <section class="mb-4" id="experience">
@@ -40,7 +41,7 @@ const portfolioContent = await fetchData('http://localhost:5000/api/portfolio');
       <div class="experience-item mb-4">
         <h3>{item.title}</h3>
         <p class="text-muted mb-2"><small>{item.duration}</small></p>
-        <p>{item.description}</p>
+        <p set:html={item?.description} />
       </div>
     ))}
   </section>
@@ -50,7 +51,7 @@ const portfolioContent = await fetchData('http://localhost:5000/api/portfolio');
     {portfolioContent?.map((item) => (
       <div class="port-item mb-5">
         <h3>{item.title}</h3>
-        <p>{item.description}</p>
+        <p set:html={item?.description} />
           <div class="port-item-tech mb-3 d-flex flex-wrap gap-2">
             {item.badges.map((badge) => (
               <span 
