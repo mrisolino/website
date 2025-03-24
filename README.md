@@ -13,7 +13,7 @@ Este backend provee una API REST para gestionar el contenido de un currículum d
 
 ## Características Principales
 - **Gestión de contenido**: CRUD para secciones del CV (Extracto, Skills, Experiencia, Portfolio).
-- **Compilación automática**: Integración con `npm run build` para proyectos Astro.
+- **Compilación automática**: Integración con `npm run build` para proyectos Astro. Una vez guardado los datos del backend, queda la compilación en /dist
 - **Interfaz administrativa**: Panel web con formularios dinámicos y previsualización en tiempo real.
 - **Persistencia de datos**: Almacenamiento en archivos JSON.
 
