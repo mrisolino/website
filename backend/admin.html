@@ -6,6 +6,16 @@
   <title>Administrar Contenido</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- CKEditor 5 -->
+  <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+  <style>
+        .container {
+          background-color: #8080801f;
+          padding: 20px;
+          border-radius: 20px;
+          margin-bottom: 50px;
+        }
+  </style>
 </head>
 <body>
   <div class="container mt-5">
@@ -41,7 +51,7 @@
             <textarea class="form-control" id="about-content" name="content" rows="5" required></textarea>
           </div>
           <div class="my-3 text-center">
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <button type="submit" class="btn btn-primary my-3">Guardar Cambios</button>
           </div>
         </form>
       </div>
@@ -58,7 +68,7 @@
             <textarea class="form-control" id="skills-content" name="content" rows="5" required></textarea>
           </div>
           <div class="my-3 text-center">
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <button type="submit" class="btn btn-primary my-3">Guardar Cambios</button>
           </div>
         </form>
       </div>
@@ -68,8 +78,8 @@
         <form class="mt-3" id="edit-experience-form">
           <div id="experience-items"></div>
           <div class="my-3 text-center">
-            <button type="button" class="btn btn-secondary mb-3" id="add-experience">Agregar Experiencia</button>
-            <button type="submit" class="btn btn-primary mb-3">Guardar Cambios</button>
+            <button type="button" class="btn btn-secondary my-3" id="add-experience">Agregar Experiencia</button>
+            <button type="submit" class="btn btn-primary my-3">Guardar Cambios</button>
           </div>
         </form>
       </div>
@@ -79,73 +89,50 @@
         <form class="mt-3" id="edit-portfolio-form">
           <div id="portfolio-items"></div>
           <div class="my-3 text-center">
-            <button type="button" class="btn btn-secondary mb-3" id="add-portfolio">Agregar Proyecto</button>
-            <button type="submit" class="btn btn-primary mb-3">Guardar Cambios</button>
+            <button type="button" class="btn btn-secondary my-3" id="add-portfolio">Agregar Proyecto</button>
+            <button type="submit" class="btn btn-primary my-3">Guardar Cambios</button>
           </div>
         </form>
       </div>
     </div>
 
     <hr />
-    
+
     <div class="my-3 text-center">
         <button id="build-button" class="btn btn-success">Compilar Proyecto (BUILD)</button>
         <div id="build-status" class="mt-2"></div>
     </div>
-
 
   </div>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-document.getElementById('build-button').addEventListener('click', async () => {
-  const statusDiv = document.getElementById('build-status');
-  statusDiv.innerHTML = '<p>Compilando... Por favor, espera.</p>';
-
-  try {
-    const response = await fetch('http://localhost:5000/api/build', {
-      method: 'POST',
-    });
-
-    console.log("Response recibida:", response); // <-- Agregar para ver qué se obtiene
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+    // Función para inicializar CKEditor
+    function initCKEditor(textareaElement) {
+      return ClassicEditor.create(textareaElement, {
+        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'undo', 'redo']
+      }).catch(error => {
+        console.error('Error al inicializar CKEditor:', error);
+      });
     }
-
-    const result = await response.json();
-    console.log("JSON parseado:", result); // <-- Agregar para ver el JSON recibido
-
-    if (result.success) {
-      statusDiv.innerHTML = `<p class="text-success">${result.message}</p>`;
-    } else {
-      statusDiv.innerHTML = `<p class="text-danger">Error: ${result.details}</p>`;
-    }
-  } catch (error) {
-    console.error("Error en el try-catch:", error); // <-- Mostrar error en consola
-    statusDiv.innerHTML = `<p class="text-danger">Error al conectar con el servidor: ${error.message}</p>`;
-  }
-});
-
 
     document.addEventListener('DOMContentLoaded', async () => {
       const sections = ['about', 'skills', 'experience', 'portfolio'];
       const forms = {};
 
-      // Función para cargar datos de una sección
+      // Cargar datos
       const loadData = async (section) => {
         try {
           const response = await fetch(`http://localhost:5000/api/${section}`);
-          const data = await response.json();
-          return data;
+          return await response.json();
         } catch (error) {
           console.error(`Error loading ${section}:`, error);
           return null;
         }
       };
 
-      // Función para guardar datos de una sección
+      // Guardar datos
       const saveData = async (section, data) => {
         try {
           const response = await fetch(`http://localhost:5000/api/${section}`, {
@@ -166,66 +153,55 @@ document.getElementById('build-button').addEventListener('click', async () => {
         forms[section] = document.getElementById(`edit-${section}-form`);
       });
 
-      // Cargar y rellenar datos iniciales
+      // Cargar y inicializar datos
       await Promise.all(sections.map(async (section) => {
         const data = await loadData(section);
 
         if (section === 'about' || section === 'skills') {
-          // Rellenar formularios simples
           forms[section].querySelector('[name="title"]').value = data.title || '';
           forms[section].querySelector('[name="content"]').value = data.content || '';
         } else if (section === 'experience') {
-          // Rellenar experiencias (array)
           const container = document.getElementById('experience-items');
-          container.innerHTML = ''; // Limpiar contenedor
-
-          data.forEach((item, index) => {
-            addExperienceItem(container, item, index);
-          });
-
-          // Agregar nueva experiencia
+          container.innerHTML = '';
+          data.forEach((item, index) => addExperienceItem(container, item, index));
+          
           document.getElementById('add-experience').addEventListener('click', () => {
             addExperienceItem(container, { title: '', duration: '', description: '' }, data.length);
           });
         } else if (section === 'portfolio') {
-          // Rellenar proyectos (array)
           const container = document.getElementById('portfolio-items');
-          container.innerHTML = ''; // Limpiar contenedor
-
-          data.forEach((item, index) => {
-            addPortfolioItem(container, item, index);
-          });
-
-          // Agregar nuevo proyecto
+          container.innerHTML = '';
+          data.forEach((item, index) => addPortfolioItem(container, item, index));
+          
           document.getElementById('add-portfolio').addEventListener('click', () => {
             addPortfolioItem(container, { title: '', description: '', repo: '', badges: [] }, data.length);
           });
         }
       }));
 
+      // Inicializar editores estáticos
+      await initCKEditor(document.querySelector('#about-content'));
+      await initCKEditor(document.querySelector('#skills-content'));
+
       // Manejar envíos de formularios
       sections.forEach((section) => {
         forms[section].addEventListener('submit', async (e) => {
           e.preventDefault();
-
           let newData;
 
           if (section === 'about' || section === 'skills') {
-            // Datos simples
             const formData = new FormData(forms[section]);
             newData = {
               title: formData.get('title'),
               content: formData.get('content'),
             };
           } else if (section === 'experience') {
-            // Array de experiencias
             newData = Array.from(document.querySelectorAll('#experience-items .experience-item')).map((item) => ({
               title: item.querySelector('[name="title"]').value,
               duration: item.querySelector('[name="duration"]').value,
               description: item.querySelector('[name="description"]').value,
             }));
           } else if (section === 'portfolio') {
-            // Array de proyectos
             newData = Array.from(document.querySelectorAll('#portfolio-items .portfolio-item')).map((item) => ({
               title: item.querySelector('[name="title"]').value,
               description: item.querySelector('[name="description"]').value,
@@ -241,11 +217,10 @@ document.getElementById('build-button').addEventListener('click', async () => {
         });
       });
 
-      // Función para agregar un campo de experiencia
+      // Función para agregar experiencia
       function addExperienceItem(container, item, index) {
         const div = document.createElement('div');
         div.className = 'experience-item border p-3 mb-3';
-
         div.innerHTML = `
           <h5>Experiencia ${index + 1}</h5>
           <div class="mb-2">
@@ -265,31 +240,19 @@ document.getElementById('build-button').addEventListener('click', async () => {
           <button type="button" class="btn btn-sm btn-secondary mt-2 move-down">Mover Abajo</button>
         `;
 
-        // Agregar funcionalidad para eliminar la experiencia
-        div.querySelector('.remove-experience').addEventListener('click', () => {
-          div.remove();
-        });
-
-        // Agregar funcionalidad para mover hacia arriba
+        div.querySelector('.remove-experience').addEventListener('click', () => div.remove());
         div.querySelector('.move-up').addEventListener('click', () => {
-          const prev = div.previousElementSibling;
-          if (prev) {
-            div.parentNode.insertBefore(div, prev);
-          }
+          if (div.previousElementSibling) div.parentNode.insertBefore(div, div.previousElementSibling);
         });
-
-        // Agregar funcionalidad para mover hacia abajo
         div.querySelector('.move-down').addEventListener('click', () => {
-          const next = div.nextElementSibling;
-          if (next) {
-            div.parentNode.insertBefore(next, div);
-          }
+          if (div.nextElementSibling) div.parentNode.insertBefore(div.nextElementSibling, div);
         });
 
         container.appendChild(div);
+        initCKEditor(div.querySelector('textarea[name="description"]'));
       }
 
-      // Función para agregar un campo de portfolio
+      // Función para agregar proyecto
       function addPortfolioItem(container, item, index) {
         const div = document.createElement('div');
         div.className = 'portfolio-item border p-3 mb-3';
@@ -318,48 +281,27 @@ document.getElementById('build-button').addEventListener('click', async () => {
         `;
 
         const badgeContainer = div.querySelector('.badge-container');
-
-        // Agregar badges existentes
-        item.badges?.forEach((badge) => {
-          addBadgeInput(badgeContainer, badge);
-        });
-
-        // Agregar nuevo badge
-        div.querySelector('.add-badge').addEventListener('click', () => {
-          addBadgeInput(badgeContainer, { text: '', color: 'primary' });
-        });
-
-        // Agregar funcionalidad para eliminar el proyecto
-        div.querySelector('.remove-portfolio').addEventListener('click', () => {
-          div.remove();
-        });
-
-        // Agregar funcionalidad para mover hacia arriba
+        item.badges?.forEach((badge) => addBadgeInput(badgeContainer, badge));
+        
+        div.querySelector('.add-badge').addEventListener('click', () => addBadgeInput(badgeContainer));
+        div.querySelector('.remove-portfolio').addEventListener('click', () => div.remove());
         div.querySelector('.move-up').addEventListener('click', () => {
-          const prev = div.previousElementSibling;
-          if (prev) {
-            div.parentNode.insertBefore(div, prev);
-          }
+          if (div.previousElementSibling) div.parentNode.insertBefore(div, div.previousElementSibling);
         });
-
-        // Agregar funcionalidad para mover hacia abajo
         div.querySelector('.move-down').addEventListener('click', () => {
-          const next = div.nextElementSibling;
-          if (next) {
-            div.parentNode.insertBefore(next, div);
-          }
+          if (div.nextElementSibling) div.parentNode.insertBefore(div.nextElementSibling, div);
         });
 
         container.appendChild(div);
+        initCKEditor(div.querySelector('textarea[name="description"]'));
       }
 
-      // Función para agregar un campo de badge
+      // Función para badges
       function addBadgeInput(container, badge = { text: '', color: 'primary' }) {
         const div = document.createElement('div');
         div.className = 'badge-edit mb-2 d-flex align-items-center';
-
         div.innerHTML = `
-          <input type="text" class="form-control me-2 badge-text" placeholder="Texto del badge" value="${badge.text || ''}">
+          <input type="text" class="form-control me-2 badge-text" placeholder="Texto del badge" value="${badge.text}">
           <select class="form-select me-2 badge-color" style="width: 150px;">
             <option value="primary" ${badge.color === 'primary' ? 'selected' : ''}>Primary</option>
             <option value="success" ${badge.color === 'success' ? 'selected' : ''}>Success</option>
@@ -369,14 +311,28 @@ document.getElementById('build-button').addEventListener('click', async () => {
           </select>
           <button type="button" class="btn btn-sm btn-danger remove-badge">Eliminar</button>
         `;
-
-        // Agregar funcionalidad para eliminar el badge
-        div.querySelector('.remove-badge').addEventListener('click', () => {
-          div.remove();
-        });
-
+        div.querySelector('.remove-badge').addEventListener('click', () => div.remove());
         container.appendChild(div);
       }
+
+      // Build button
+      document.getElementById('build-button').addEventListener('click', async () => {
+        const statusDiv = document.getElementById('build-status');
+        statusDiv.innerHTML = '<p>Compilando... Por favor, espera.</p>';
+
+        try {
+          const response = await fetch('http://localhost:5000/api/build', { method: 'POST' });
+          if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+          
+          const result = await response.json();
+          statusDiv.innerHTML = result.success 
+            ? `<p class="text-success">${result.message}</p>`
+            : `<p class="text-danger">Error: ${result.details}</p>`;
+        } catch (error) {
+          console.error("Error:", error);
+          statusDiv.innerHTML = `<p class="text-danger">Error al conectar con el servidor: ${error.message}</p>`;
+        }
+      });
     });
   </script>
 </body>
