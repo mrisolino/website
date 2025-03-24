@@ -4,6 +4,19 @@ const { title } = Astro.props;
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta property="og:title" content="Martín Risolino - Desarrollador Web">
+  <meta property="og:description" content="Sitio web oficial de Martín Risolino, donde comparto mis proyectos y conocimientos en desarrollo web.">
+  <meta property="og:image" content="https://www.martinrisolino.com.ar/images/martin.webp">
+  <meta property="og:url" content="https://www.martinrisolino.com.ar">
+  <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Martín Risolino - Desarrollador Web">
+  <meta name="twitter:description" content="Sitio web oficial de Martín Risolino, donde comparto mis proyectos y conocimientos en desarrollo web.">
+  <meta name="twitter:image" content="https://www.martinrisolino.com.ar/images/martin.webp">
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R9Z9241PWN"></script>
   <script>
@@ -31,7 +44,6 @@ const { title } = Astro.props;
   <div id="cv" class="container">
     <slot />
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>
